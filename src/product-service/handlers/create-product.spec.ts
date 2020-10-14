@@ -1,7 +1,6 @@
+import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import createEvent from '@serverless/event-mocks';
-import { APIGatewayProxyResult } from 'aws-lambda';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { mockProduct } from '../mock/product.mock';
 import { productService } from '../product.service';
 import { handler as createProduct } from './create-product';
@@ -22,7 +21,7 @@ describe('createProduct', () => {
       productService.create = jest.fn().mockReturnValue(product);
       const result = await createProduct(mockEvent, null, null);
 
-      expect(result).toEqual(new HttpResponse(HttpStatusCode.OK, product));
+      expect(result).toEqual(new HttpResponse(HttpStatusCode.CREATED, product));
     });
   });
 
@@ -46,7 +45,7 @@ describe('createProduct', () => {
       throw new Error('');
     });
     const result = (await createProduct(
-      null,
+      {} as APIGatewayProxyEvent,
       null,
       null
     )) as APIGatewayProxyResult;

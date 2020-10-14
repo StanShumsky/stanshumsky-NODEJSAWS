@@ -1,6 +1,5 @@
-import { APIGatewayProxyResult } from 'aws-lambda';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
+import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { mockProduct } from '../mock/product.mock';
 import { productService } from '../product.service';
 import { handler as getProductList } from './get-product-list';
@@ -9,7 +8,7 @@ describe('getProductList', () => {
   test('should return products', async () => {
     const products = [mockProduct(), mockProduct()];
     productService.find = jest.fn().mockReturnValue(products);
-    const result = await getProductList(null, null, null);
+    const result = await getProductList({} as APIGatewayProxyEvent, null, null);
 
     expect(result).toEqual(new HttpResponse(HttpStatusCode.OK, products));
   });
@@ -19,7 +18,7 @@ describe('getProductList', () => {
       throw new Error('');
     });
     const result = (await getProductList(
-      null,
+      {} as APIGatewayProxyEvent,
       null,
       null
     )) as APIGatewayProxyResult;

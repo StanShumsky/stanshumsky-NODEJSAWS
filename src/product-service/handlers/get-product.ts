@@ -1,12 +1,10 @@
+import { validate, HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import * as Joi from 'joi';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
-import { validate } from '../../utils/validate';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 

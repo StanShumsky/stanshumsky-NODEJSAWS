@@ -1,7 +1,6 @@
+import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import createEvent from '@serverless/event-mocks';
-import { APIGatewayProxyResult } from 'aws-lambda';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { mockProduct } from '../mock/product.mock';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
@@ -63,7 +62,7 @@ describe('getProductById', () => {
       throw new Error('');
     });
     const result = (await getProductById(
-      null,
+      {} as APIGatewayProxyEvent,
       null,
       null
     )) as APIGatewayProxyResult;

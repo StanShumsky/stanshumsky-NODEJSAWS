@@ -1,6 +1,5 @@
+import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 

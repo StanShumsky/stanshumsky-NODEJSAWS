@@ -1,3 +1,4 @@
+import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
@@ -6,8 +7,7 @@ import {
 } from 'aws-lambda';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { HttpResponse } from 'src/utils/http-response';
-import { HttpStatusCode } from 'src/utils/http-status-code.enum';
+
 import { setup } from 'swagger-ui-aws-apigateway';
 
 const document = readFileSync(resolve(__dirname, '../../openapi.yml'));

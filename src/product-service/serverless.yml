@@ -19,14 +19,14 @@ provider:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
 functions:
   swagger:
-    handler: src/docs/docs.handler
+    handler: docs/docs.handler
     events:
       - http:
           path: /
           method: any
           cors: true
   getProductsList:
-    handler: src/products/handlers/get-product-list.handler
+    handler: handlers/get-product-list.handler
     events:
       - http:
           method: get
@@ -34,7 +34,7 @@ functions:
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductsList}
   getProductById:
-    handler: src/products/handlers/get-product.handler
+    handler: handlers/get-product.handler
     events:
       - http:
           method: get
@@ -42,7 +42,7 @@ functions:
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductById}
   createProduct:
-    handler: src/products/handlers/create-product.handler
+    handler: handlers/create-product.handler
     events:
       - http:
           method: post
@@ -54,7 +54,8 @@ custom:
   documentation: ${file(serverless.doc.yml):documentation}
   webpack:
     webpackConfig: ./webpack.config.js
-    includeModules: true
+    includeModules:
+      packagePath: ../../package.json
   dotenv:
     path: .env
     logging: false

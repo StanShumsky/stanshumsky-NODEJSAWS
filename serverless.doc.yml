@@ -1,0 +1,72 @@
+endpoints:
+  getProductsList:
+    summary: Get products
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: Success
+        responseModels:
+          application/json: Product
+      - statusCode: 500
+        responseBody:
+          description: Unexpected Error
+        responseModels:
+          application/json: Error
+
+  getProductById:
+    summary: Get product by ID
+    pathParams:
+      - name: id
+        description: Product ID
+        schema:
+          type: string
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: Success
+        responseModels:
+          application/json: Product
+      - statusCode: 400
+        responseBody:
+          description: Bad request
+        responseModels:
+          application/json: Error
+      - statusCode: 404
+        responseBody:
+          description: Not Found
+        responseModels:
+          application/json: Error
+      - statusCode: 500
+        responseBody:
+          description: Unexpected Error
+        responseModels:
+          application/json: Error
+
+documentation:
+  title: 'stanshumsky-NODEJSAWS'
+  description: 'stanshumsky-NODEJSAWS API'
+  models:
+    - name: Product
+      contentType: application/json
+      type: object
+      schema:
+        properties:
+          id:
+            type: string
+          description:
+            type: string
+          price:
+            type: string
+          title:
+            type: string
+          imageUrl:
+            type: string
+    - name: Error
+      contentType: application/json
+      schema:
+        properties:
+          code:
+            type: integer
+            format: int32
+          message:
+            type: string

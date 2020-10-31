@@ -1,0 +1,48 @@
+service: product-api
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-openapi-documentation
+package:
+  individually: false
+  excludeDevDependencies: false
+  include:
+    - openapi.yaml
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+functions:
+  swagger:
+    handler: src/docs/docs.handler
+    events:
+      - http:
+          path: /
+          method: any
+          cors: true
+  getProductsList:
+    handler: src/products/handlers/get-product-list.handler
+    events:
+      - http:
+          method: get
+          path: products
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductsList}
+  getProductById:
+    handler: src/products/handlers/get-product.handler
+    events:
+      - http:
+          method: get
+          path: products/{id}
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductById}
+
+custom:
+  documentation: ${file(serverless.doc.yml):documentation}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true

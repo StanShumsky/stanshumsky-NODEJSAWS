@@ -15,7 +15,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@sls/feature-products": ["libs/feature-products/src/index.ts"],
+      "@sls/http": ["libs/http/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

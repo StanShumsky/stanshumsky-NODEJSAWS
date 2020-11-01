@@ -1,0 +1,31 @@
+service: product-api
+frameworkVersion: '>=1.2.0 <2.0.0'
+plugins:
+  - serverless-offline
+package:
+  individually: true
+  excludeDevDependencies: false
+  # path: dist/apps/product-api
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+functions:
+  getProductsList:
+    handler: src/handlers/get-product-list.handler
+    events:
+      - http:
+          method: get
+          path: /products
+          cors: true
+  getProductById:
+    handler: src/handlers/get-product.handler
+    events:
+      - http:
+          method: get
+          path: /products/{id}
+          cors: true

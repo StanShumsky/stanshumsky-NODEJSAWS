@@ -27,5 +27,15 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "feature-products": {
+      "tags": []
+    },
+    "product-api": {
+      "tags": []
+    },
+    "http": {
+      "tags": []
+    }
+  }
 }

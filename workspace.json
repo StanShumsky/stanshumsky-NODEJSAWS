@@ -1,7 +1,164 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "feature-products": {
+      "root": "libs/feature-products",
+      "sourceRoot": "libs/feature-products/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/feature-products/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/feature-products/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "product-api": {
+      "root": "apps/product-api",
+      "sourceRoot": "apps/product-api/src",
+      "projectType": "application",
+      "prefix": "product-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@flowaccount/nx-serverless:build",
+          "options": {
+            "outputPath": "dist/apps/product-api",
+            "package": "apps/product-api",
+            "serverlessConfig": "apps/product-api/serverless.yml",
+            "servicePath": "apps/product-api",
+            "tsConfig": "apps/product-api/tsconfig.app.json",
+            "provider": "aws",
+            "processEnvironmentFile": "env.json"
+          },
+          "configurations": {
+            "dev": {
+              "optimization": false,
+              "sourceMap": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "production": {
+              "optimization": true,
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/product-api/environment.ts",
+                  "with": "apps/product-api/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@flowaccount/nx-serverless:offline",
+          "options": {
+            "buildTarget": "product-api:build",
+            "config": "apps/product-api/serverless.yml",
+            "location": "dist/apps/product-api"
+          },
+          "configurations": {
+            "dev": {
+              "buildTarget": "product-api:build:dev"
+            },
+            "production": {
+              "buildTarget": "product-api:build:production"
+            }
+          }
+        },
+        "deploy": {
+          "builder": "@flowaccount/nx-serverless:deploy",
+          "options": {
+            "buildTarget": "product-api:build:production",
+            "config": "apps/product-api/serverless.yml",
+            "location": "dist/apps/product-api",
+            "package": "dist/apps/product-api"
+          }
+        },
+        "destroy": {
+          "builder": "@flowaccount/nx-serverless:destroy",
+          "options": {
+            "buildTarget": "product-api:build:production",
+            "config": "apps/product-api/serverless.yml",
+            "location": "dist/apps/product-api",
+            "package": "dist/apps/product-api"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/product-api/tsconfig.app.json",
+              "apps/product-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/product-api/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/product-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "http": {
+      "root": "libs/http",
+      "sourceRoot": "libs/http/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/http/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/http/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@flowaccount/nx-serverless"
+  },
+  "defaultProject": "product-api"
 }

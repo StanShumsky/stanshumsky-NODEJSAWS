@@ -1,0 +1,74 @@
+openapi: 3.0.0
+components:
+  schemas:
+    Product:
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        price:
+          type: string
+        title:
+          type: string
+        imageUrl:
+          type: string
+    Error:
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes: {}
+info:
+  title: stanshumsky-NODEJSAWS
+  description: stanshumsky-NODEJSAWS API
+  version: 81d14df6-745b-41a9-89c0-638fad00bffa
+paths:
+  /products:
+    get:
+      operationId: getProductsList
+      summary: Get products
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/products/{id}':
+    get:
+      operationId: getProductById
+      summary: Get product by ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Unexpected Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

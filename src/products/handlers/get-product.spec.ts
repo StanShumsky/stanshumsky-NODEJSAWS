@@ -2,6 +2,7 @@ import createEvent from '@serverless/event-mocks';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import { HttpResponse } from '../../utils/http-response';
 import { HttpStatusCode } from '../../utils/http-status-code.enum';
+import { mockProduct } from '../mock/product.mock';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 import { handler as getProductById } from './get-product';
@@ -10,28 +11,25 @@ describe('getProductById', () => {
   describe('given id in pathParameters', () => {
     const mockEvent = createEvent('aws:apiGateway', {
       pathParameters: {
-        id: 'test',
+        id: 'a21afdd4-8621-4b0d-bac3-c21a8475ad30',
       },
     } as any);
 
     test('should return product by id', async () => {
-      const mockProduct: IProduct = {
-        id: 'test',
-        title: 'test',
-        description: 'test',
-        price: '10.0',
-        imageUrl: 'test.com',
-      };
-      productService.findOne = jest.fn().mockReturnValue(mockProduct);
+      const product: IProduct = mockProduct({
+        id: 'a21afdd4-8621-4b0d-bac3-c21a8475ad30',
+      });
+
+      productService.findOne = jest.fn().mockReturnValue(product);
       const result = await getProductById(mockEvent, null, null);
 
-      expect(result).toEqual(new HttpResponse(HttpStatusCode.OK, mockProduct));
+      expect(result).toEqual(new HttpResponse(HttpStatusCode.OK, product));
     });
 
     test('should return not found error', async () => {
       const mockEvent = createEvent('aws:apiGateway', {
         pathParameters: {
-          id: 'test',
+          id: 'a21afdd4-8621-4b0d-bac3-c21a8475ad30',
         },
       } as any);
       productService.findOne = jest.fn().mockReturnValue(null);

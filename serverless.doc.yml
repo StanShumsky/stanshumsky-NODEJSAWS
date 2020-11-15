@@ -42,6 +42,28 @@ endpoints:
         responseModels:
           application/json: Error
 
+  createProduct:
+    summary: Create product
+    requestBody:
+      title: title
+      description: description
+      price: price
+      count: count
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: Success
+        responseModels:
+          application/json: Product
+      - statusCode: 400
+        responseBody:
+          description: Bad request
+      - statusCode: 500
+        responseBody:
+          description: Unexpected Error
+        responseModels:
+          application/json: Error
+
 documentation:
   title: 'stanshumsky-NODEJSAWS'
   description: 'stanshumsky-NODEJSAWS API'

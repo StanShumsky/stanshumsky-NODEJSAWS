@@ -1,10 +1,14 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { HttpResponse } from '../../utils/http-response';
 import { HttpStatusCode } from '../../utils/http-status-code.enum';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 
-export const handler: APIGatewayProxyHandler = async () => {
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+) => {
+  console.log({ path: event.path, method: event.httpMethod });
+
   try {
     const products: IProduct[] = await productService.find();
     return new HttpResponse(HttpStatusCode.OK, products);

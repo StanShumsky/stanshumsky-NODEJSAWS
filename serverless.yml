@@ -3,6 +3,7 @@ plugins:
   - serverless-offline
   - serverless-webpack
   - serverless-openapi-documentation
+  - serverless-dotenv-plugin
 package:
   individually: false
   excludeDevDependencies: false
@@ -40,9 +41,20 @@ functions:
           path: products/{id}
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductById}
+  createProduct:
+    handler: src/products/handlers/create-product.handler
+    events:
+      - http:
+          method: post
+          path: products
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.createProduct}
 
 custom:
   documentation: ${file(serverless.doc.yml):documentation}
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+  dotenv:
+    path: .env
+    logging: false

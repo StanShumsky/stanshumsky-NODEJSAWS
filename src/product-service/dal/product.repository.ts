@@ -1,5 +1,5 @@
+import { POSTGRES_DB_CONFIG } from '@nodejsaws/shared';
 import { Client } from 'pg';
-import { POSTGRES_DB_CONFIG } from '../../utils/constants';
 import { IProduct } from '../product.interface';
 
 export class ProductRepository {

@@ -1,5 +1,5 @@
+import { POSTGRES_DB_CONFIG } from '@nodejsaws/shared';
 import { Client } from 'pg';
-import { POSTGRES_DB_CONFIG } from 'src/utils/constants';
 
 export async function invoke(): Promise<void> {
   const client = new Client(POSTGRES_DB_CONFIG);

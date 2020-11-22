@@ -1,12 +1,10 @@
+import { validate, HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import * as Joi from 'joi';
-import { HttpResponse } from '../../utils/http-response';
-import { HttpStatusCode } from '../../utils/http-status-code.enum';
-import { validate } from '../../utils/validate';
 import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 
@@ -28,7 +26,7 @@ export const handler: APIGatewayProxyHandler = async (
       return new HttpResponse(HttpStatusCode.BAD_REQUEST, error);
     } else {
       const product: IProduct = await productService.create(value);
-      return new HttpResponse(HttpStatusCode.OK, product);
+      return new HttpResponse(HttpStatusCode.CREATED, product);
     }
   } catch (error) {
     return new HttpResponse(HttpStatusCode.INTERNAL_SERVER_ERROR, error);

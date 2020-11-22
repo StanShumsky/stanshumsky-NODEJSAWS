@@ -11,3 +11,8 @@ export const POSTGRES_DB_CONFIG = {
   },
   connectionTimeoutMillis: 5000,
 };
+
+export const AWS_CONFIG = {
+  region: 'eu-west-1',
+  bucket: 'shumsky-s3',
+};

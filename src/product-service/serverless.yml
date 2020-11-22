@@ -1,4 +1,4 @@
-service: product-api
+service: product-service
 plugins:
   - serverless-offline
   - serverless-webpack
@@ -12,11 +12,24 @@ package:
 provider:
   name: aws
   region: eu-west-1
+  stage: ${self:custom.stage}
   runtime: nodejs12.x
   apiGateway:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    SNS_ARN:
+      Ref: SNSTopic
+    SQS_URL: ${cf:import-service-${self:custom.stage}.SQSQueue}
+  iamRoleStatements:
+    - Effect: Allow
+      Action: sns:*
+      Resource:
+        Ref: SNSTopic
+    - Effect: Allow
+      Action: sqs:*
+      Resource:
+        - ${cf:import-service-${self:custom.stage}.SQSQueueArn}
 functions:
   swagger:
     handler: docs/docs.handler
@@ -49,13 +62,47 @@ functions:
           path: products
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.createProduct}
+  catalogBatchProcess:
+    handler: handlers/catalog-batch-process.handler
+    events:
+      - sqs:
+          batchSize: 5
+          arn: ${cf:import-service-${self:custom.stage}.SQSQueueArn}
+
+resources:
+  Resources:
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:PRODUCT_NOTIFICATION_EMAIL_SUCCESS}
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          status:
+            - Success
+    SNSSubscription2:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:PRODUCT_NOTIFICATION_EMAIL_ERROR}
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          status:
+            - Error
 
 custom:
+  stage: ${opt:stage,'dev'}
   documentation: ${file(serverless.doc.yml):documentation}
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules:
       packagePath: ../../package.json
   dotenv:
-    path: .env
+    path: ../../.env
     logging: false

@@ -1,6 +1,5 @@
-import { POSTGRES_DB_CONFIG } from '@nodejsaws/shared';
+import { IProduct, POSTGRES_DB_CONFIG } from '@nodejsaws/shared';
 import { Client } from 'pg';
-import { IProduct } from '../product.interface';
 
 export class ProductRepository {
   public async find(): Promise<IProduct[]> {

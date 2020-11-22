@@ -1,12 +1,10 @@
 import createEvent from '@serverless/event-mocks';
 import { S3Event, S3EventRecord } from 'aws-lambda';
-import {
-  handler as importFileParser,
-  handleReadStream,
-} from './import-file-parser';
+import { handler as importFileParser } from './import-file-parser';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { simpleStrorageService } from '../ simple-storage.service';
+import { queueService } from '@nodejsaws/shared';
 
 describe('importFileParser', () => {
   it('should parse the file', async () => {
@@ -23,10 +21,11 @@ describe('importFileParser', () => {
     simpleStrorageService.deleteObject = jest
       .fn()
       .mockReturnValue(Promise.resolve());
+    queueService.sendMessage = jest.fn().mockReturnValue(Promise.resolve());
 
-    const result = await importFileParser(mockEvent, null, null);
+    await importFileParser(mockEvent, null, null);
 
-    expect(result).not.toBeDefined();
+    expect(queueService.sendMessage).toHaveBeenCalledTimes(1);
     expect(simpleStrorageService.createReadStream).toHaveBeenCalledTimes(1);
     expect(simpleStrorageService.copyObject).toHaveBeenCalledTimes(1);
     expect(simpleStrorageService.deleteObject).toHaveBeenCalledTimes(1);

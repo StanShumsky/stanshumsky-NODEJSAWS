@@ -1,4 +1,4 @@
-import { IProduct } from './product.interface';
+import { IProduct } from '@nodejsaws/shared';
 import { ProductRepository } from './dal/product.repository';
 
 export class ProcutsService {

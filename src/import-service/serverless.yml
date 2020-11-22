@@ -9,11 +9,14 @@ package:
 provider:
   name: aws
   region: eu-west-1
+  stage: ${self:custom.stage}
   runtime: nodejs12.x
   apiGateway:
     minimumCompressionSize: 1024
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    SQS_URL:
+      Ref: SQSQueue
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -22,6 +25,10 @@ provider:
         - s3:DeleteObject
         - s3:ListObjects
       Resource: arn:aws:s3:::shumsky-s3/*
+    - Effect: Allow
+      Action: sqs:*
+      Resource:
+        Fn::GetAtt: [SQSQueue, Arn]
 functions:
   importProductsFile:
     handler: handlers/import-products-file.handler
@@ -44,12 +51,26 @@ functions:
             - prefix: uploaded/
             - suffix: .csv
           existing: true
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+  Outputs:
+    SQSQueueArn:
+      Value:
+        Fn::GetAtt: [SQSQueue, Arn]
+    SQSQueue:
+      Value:
+        Ref: SQSQueue
 
 custom:
+  stage: ${opt:stage,'dev'}
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules:
       packagePath: ../../package.json
   dotenv:
-    path: .env
+    path: ../../.env
     logging: false

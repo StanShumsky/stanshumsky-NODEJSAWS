@@ -1,6 +1,5 @@
-import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
+import { HttpResponse, HttpStatusCode, IProduct } from '@nodejsaws/shared';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 
 export const handler: APIGatewayProxyHandler = async (

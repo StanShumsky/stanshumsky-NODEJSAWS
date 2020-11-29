@@ -1,8 +1,7 @@
-import { HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
+import { HttpResponse, HttpStatusCode, IProduct } from '@nodejsaws/shared';
 import createEvent from '@serverless/event-mocks';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { mockProduct } from '../mock/product.mock';
-import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 import { handler as getProductById } from './get-product';
 

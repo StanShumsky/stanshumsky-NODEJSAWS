@@ -1,11 +1,15 @@
-import { validate, HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
+import {
+  validate,
+  HttpResponse,
+  HttpStatusCode,
+  IProduct,
+} from '@nodejsaws/shared';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
 import * as Joi from 'joi';
-import { IProduct } from '../product.interface';
 import { productService } from '../product.service';
 
 const schema = Joi.object({

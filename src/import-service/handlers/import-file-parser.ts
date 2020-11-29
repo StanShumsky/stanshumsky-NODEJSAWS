@@ -1,3 +1,4 @@
+import { IProduct, queueService } from '@nodejsaws/shared';
 import { S3Event, S3Handler } from 'aws-lambda';
 import * as csvParser from 'csv-parser';
 import { Readable } from 'stream';
@@ -24,8 +25,8 @@ export const handler: S3Handler = async (event: S3Event): Promise<void> => {
         .createReadStream(target)
         .pipe(csvParser());
 
-      await handleReadStream(csvParserStream);
-
+      const products = await handleReadStream<IProduct>(csvParserStream);
+      await queueService.sendMessage(products);
       await simpleStrorageService.copyObject(
         target,
         target.replace('uploaded', 'parsed')

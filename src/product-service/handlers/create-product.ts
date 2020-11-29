@@ -1,19 +1,16 @@
-import { validate, HttpResponse, HttpStatusCode } from '@nodejsaws/shared';
+import {
+  HttpResponse,
+  HttpStatusCode,
+  IProduct,
+  validate,
+} from '@nodejsaws/shared';
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
-import * as Joi from 'joi';
-import { IProduct } from '../product.interface';
+import { productSchema } from '../product.schema';
 import { productService } from '../product.service';
-
-const schema = Joi.object({
-  title: Joi.string().max(255).required(),
-  description: Joi.string().max(2083).required(),
-  price: Joi.number().min(0).required(),
-  count: Joi.number().min(0).required(),
-});
 
 export const handler: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
@@ -21,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (
   console.log({ path: event.path, method: event.httpMethod, body: event.body });
 
   try {
-    const { error, value } = validate(schema, JSON.parse(event.body));
+    const { error, value } = validate(productSchema, JSON.parse(event.body));
     if (error) {
       return new HttpResponse(HttpStatusCode.BAD_REQUEST, error);
     } else {

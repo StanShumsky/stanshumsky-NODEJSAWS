@@ -1,5 +1,5 @@
+import { IProduct } from '@nodejsaws/shared';
 import * as faker from 'faker';
-import { IProduct } from '../product.interface';
 
 export function mockProduct(body: Partial<IProduct> = {}): IProduct {
   return {

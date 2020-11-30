@@ -5,3 +5,5 @@ export * from './http-status-code.enum';
 export * from './product.interface';
 export * from './queue-service';
 export * from './notification-service';
+export * from './errors';
+export * from './jwt';

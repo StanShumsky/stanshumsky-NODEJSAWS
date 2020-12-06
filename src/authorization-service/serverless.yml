@@ -1,0 +1,37 @@
+service: authorization-service
+plugins:
+  - serverless-offline
+  - serverless-webpack
+  - serverless-dotenv-plugin
+package:
+  individually: false
+  excludeDevDependencies: false
+provider:
+  name: aws
+  region: eu-west-1
+  stage: ${self:custom.stage}
+  runtime: nodejs12.x
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+functions:
+  basicAuthorizer:
+    handler: handlers/basic-authorizer.handler
+resources:
+  Outputs:
+    basicAuthorizerArn:
+      Value:
+        Fn::GetAtt:
+          - BasicAuthorizerLambdaFunction
+          - Arn
+
+custom:
+  stage: ${opt:stage,'dev'}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules:
+      packagePath: ../../package.json
+  dotenv:
+    path: ../../.env
+    logging: false
